@@ -60,9 +60,12 @@ if sys.platform == "win32":
     except Exception:
         pass
 
-SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+if getattr(sys, "frozen", False):
+    SCRIPT_DIR = os.path.dirname(os.path.abspath(sys.executable))
+else:
+    SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 CONFIG_FILE = os.path.join(SCRIPT_DIR, "config.json")
-LOG_FILE = os.path.join(SCRIPT_DIR, "lzu_login.log")
+LOG_FILE = os.path.join(SCRIPT_DIR, "LZU-autolink.log")
 PID_FILE = os.path.join(SCRIPT_DIR, "daemon.pid")
 
 # 深澜 Srun 4000 定制 Base64 码表
@@ -160,9 +163,9 @@ class ConfigManager:
 # ==================== 开机自启动全内置管理 ====================
 class AutoStartManager:
     REG_KEY = r"Software\Microsoft\Windows\CurrentVersion\Run"
-    APP_NAME = "LZU_AutoLogin"
+    APP_NAME = "LZU-autolink"
     STARTUP_DIR = os.path.expandvars(r"%APPDATA%\Microsoft\Windows\Start Menu\Programs\Startup")
-    STARTUP_VBS = os.path.join(STARTUP_DIR, "LZU_AutoLogin.vbs")
+    STARTUP_VBS = os.path.join(STARTUP_DIR, "LZU-autolink.vbs")
 
     @classmethod
     def get_pythonw_path(cls):
@@ -1231,3 +1234,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
